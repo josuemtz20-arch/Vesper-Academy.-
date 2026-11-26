@@ -4810,8 +4810,8 @@
      sin sesión, ya cerrada o caducada ("expired") ya no hay nada que reintentar */
   function examPendingSettle(att, j, err) {
     /* errores pasajeros con code (unavailable, rate_limited) también se quedan;
-       solo "expired" es definitivo */
-    var keep = err ? err.code !== "expired" : !!(j && j.why === "save_failed");
+       "expired" y "stale" (el intento es de otra versión del banco) son definitivos */
+    var keep = err ? (err.code !== "expired" && err.code !== "stale") : !!(j && j.why === "save_failed");
     if (keep) return;
     Promise.resolve(att).then(function (id) {
       if (id) examPendingDone[id] = 1;
@@ -5779,11 +5779,17 @@
       + mascot("thinking", T("Estoy revisando tus respuestas…", "I'm checking your answers…"))
       + '<p class="muted" role="status">' + T("Calculando tu nota…", "Working out your score…") + '</p></div></div>');
     p.then(function (j) {
+      /* intento con preguntas sin contestar (solo pasa si se cierra a mano): el
+         Worker no da nota (2026-11-25) */
+      if (j && j.incomplete) { paintExamIncomplete(j); return; }
       var total = isFinite(j.total) && j.total > 0 ? +j.total : lesson.exercises.length;
       var correct = isFinite(j.score) ? +j.score : 0;
       var pct = isFinite(j.percent) ? +j.percent : Math.round(100 * correct / Math.max(1, total));
-      var split = serverSkillSplit(j) || localSkillSplit();
-      paintExamResult(correct, total, pct, j, split, [], false);
+      /* Desde 2026-11-25 (opción A) el Worker ya no manda el desglose: el
+         alumno ve su nota y su nivel, y el desglose lo ve su profesor. Un
+         Worker viejo todavía manda bySkill y se pinta. Sin él, null (no se
+         cuenta en local: aquí results[] no sabe qué estuvo bien). */
+      paintExamResult(correct, total, pct, j, serverSkillSplit(j), [], false);
     }, function (err) {
       var att = p && p.att;
       show('<div class="wrap">' + topbar(92) + '<div class="card center">'
@@ -5824,6 +5830,17 @@
     }
     return null;
   }
+  function paintExamIncomplete(j) {
+    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+      + mascot("thinking", T("Faltaron preguntas por contestar.", "Some questions weren't answered."))
+      + '<h1 class="lc-title">' + T("Examen incompleto", "Exam not finished") + '</h1>'
+      + '<p class="muted">' + T("Contestaste ", "You answered ") + (+j.answered || 0) + T(" de ", " of ") + (+j.total || lesson.exercises.length)
+      + T(". Para tener nota hay que contestarlas todas.", ". To get a score you need to answer them all.") + '</p>'
+      + '<button class="btn btn-gold" id="redo">' + T('Volver a hacer el examen', 'Retake the exam') + '</button>'
+      + '<button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button></div></div>');
+    byId("redo").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+    byId("backHome").onclick = function () { location.search = ""; };
+  }
   function localSkillSplit() {
     var bySkill = {};
     (lesson.exercises || []).forEach(function (ex, i) {
@@ -5853,7 +5870,7 @@
     var SK_LABEL = enUI()
       ? { grammar: "Grammar", vocab: "Vocabulary", use: "Use of English", reading: "Reading", listening: "Listening", otro: "Other" }
       : { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
-    var rows = ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
+    var rows = !bySkill ? "" : ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
       var b = bySkill[s], p = Math.round(100 * b.c / Math.max(1, b.t));
       return '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 2px;border-bottom:1px solid var(--line,#ece7da);font-size:.9rem">'
         + '<span>' + SK_LABEL[s] + '</span><span style="color:var(--muted,#6b6b76)"><b style="color:var(--ink,#1B1B2F)">' + b.c + '/' + b.t + '</b> &middot; ' + p + '%</span></div>';
@@ -5870,9 +5887,15 @@
       + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos &middot; necesitas ', ' correct &middot; you need ') + pass + T('% para aprobar', '% to pass') + '</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%' + (passed ? '' : ';background:var(--error)') + '"></div></div>'
       + (passed ? '<div class="xp-bonus" style="margin-top:8px">' + ic('flame') + ' +' + earnedXp + ' XP</div>' : '')
-      + '<div style="margin:16px auto 4px;text-align:left;max-width:300px">'
-        + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted,#6b6b76);margin-bottom:4px">' + T('Desglose por destreza', 'Breakdown by skill') + '</div>'
-        + rows + '</div>'
+      + (rows
+        ? '<div style="margin:16px auto 4px;text-align:left;max-width:300px">'
+          + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted,#6b6b76);margin-bottom:4px">' + T('Desglose por destreza', 'Breakdown by skill') + '</div>'
+          + rows + '</div>'
+        /* sin desglose (opción A, 2026-11-25): el nivel y una línea */
+        : '<div style="margin:16px auto 4px;max-width:300px;padding:10px 14px;border:1px solid var(--line,#ece7da);border-radius:12px">'
+          + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted,#6b6b76)">' + T('Examen de nivel', 'Level exam') + '</div>'
+          + '<div style="font:800 1.4rem/1.2 Inter,system-ui,sans-serif;color:var(--ink,#1B1B2F);margin:4px 0 6px">' + esc(lesson.examLevel || lesson.level || "") + '</div>'
+          + '<div class="muted" style="font-size:.86rem">' + T('Tu profesor verá en qué destrezas reforzar.', 'Your teacher will see which skills to work on.') + '</div></div>')
       + '<p class="muted" style="font-size:.76rem;margin-top:12px">' + T('Resultado preliminar automático. Tu profesor puede confirmarlo con una evaluación oral.', 'Preliminary automatic result. Your teacher can confirm it with an oral assessment.') + '</p>'
       + (passed
           ? '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button>'

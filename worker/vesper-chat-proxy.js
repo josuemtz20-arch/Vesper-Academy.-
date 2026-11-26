@@ -40,6 +40,9 @@ import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt, lookupUser, saAccessToken,
 export { ExamAttempt };
 /* Páginas de los libros Canva desde R2 (rutas /book/*). Ver book_server.js. */
 import { handleBookOpen, handleBookPage, handleDocGet, BOOK_RATE_DEFAULTS } from "./book_server.js";
+/* Leads del diagnóstico y reportes de la IA sin cuenta (rutas /lead/placement
+   y /report/ai), 2026-11-25. Ver lead_server.js. */
+import { handleLead, LEAD_RATE_DEFAULTS } from "./lead_server.js";
 
 /* ---------- Configuración (editable) ---------- */
 
@@ -96,6 +99,8 @@ const RATE_DEFAULTS = {
   ...EXAM_RATE_DEFAULTS,
   /* libros: abrir un libro (firma el permiso de páginas), por IP */
   ...BOOK_RATE_DEFAULTS,
+  /* leads del diagnóstico y reportes de la IA: por IP y global */
+  ...LEAD_RATE_DEFAULTS,
   RL_FREE_PER_MIN: 12,     // mensajes por minuto por IP (nivel gratis)
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
   RL_PRO_PER_MIN: 30,      // con código Pro válido o cuenta reconocida
@@ -111,6 +116,15 @@ const RATE_DEFAULTS = {
   /* por uid y día: una sola cuenta (no inscrita) desde varias IPs no puede
      agotar el tope global de arriba y dejar sin Pro a los inscritos. */
   RL_CHAT_AUTH_UID_PER_DAY: 30,
+  /* Topes de mensajes Pro (Sonnet), 2026-11-25. Sonnet cuesta ~3 veces lo que
+     Haiku: con los topes de entrada, el peor caso ronda 0.03 USD por mensaje.
+     Sin esto, un script con la sesión de UN alumno inscrito gastaba los 20 USD
+     del mes en menos de una hora (solo lo frenaba el tope por IP).
+     Al pasarse, el mensaje se responde con Haiku (gratis), nunca con error.
+     - por cuenta (correo del token) y día: ~3 USD/día en el peor caso;
+     - todas las cuentas y el código Pro juntos, por día: ~9 USD/día. */
+  RL_PRO_ACCT_PER_DAY: 100,
+  RL_PRO_GLOBAL_PER_DAY: 300,
   /* todas las IPs juntas, por día (UTC). Era 5000; con los topes de entrada
      el peor caso es ~0.01 USD por mensaje, así que 2000 acota el abuso a
      ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
@@ -474,12 +488,14 @@ async function turnstileValid(env, token, ip) {
  * costaría hasta 3 lecturas). Efecto: dar de alta o de baja tarda hasta
  * ACCT_TTL_MS en notarse en el chat.
  * Cualquier fallo (token malo, Google caído, sin FIREBASE_SA, contador caído)
- * devuelve false: el chat sigue en gratis, nunca 500. */
+ * devuelve "": el chat sigue en gratis, nunca 500.
+ * Devuelve el correo de la cuenta Pro (para el tope diario por cuenta, ver
+ * proAllowed) o "" si no tiene Pro. */
 const FOUNDER_EMAIL = "josuemtz20@gmail.com";   // igual que bootstrapAdmin() en las reglas
 const ACCT_TTL_MS = 5 * 60 * 1000;
 const ACCT_FAIL_TTL_MS = 60 * 1000;            // Google/Firestore caídos: reintenta en 1 min
 const ACCT_CACHE_MAX = 500;
-const acctByToken = new Map();   // sha256(idToken) -> { pro, exp }
+const acctByToken = new Map();   // sha256(idToken) -> { pro, who, exp }
 const acctByUid = new Map();     // uid|correo      -> { pro, exp }
 
 function cacheGet(map, key, now) {
@@ -539,41 +555,41 @@ async function enrolledOrStaff(env, email) {
 }
 
 async function accountPro(env, idToken, ip) {
-  if (typeof idToken !== "string" || idToken.length < 20 || idToken.length > 4096) return false;
+  if (typeof idToken !== "string" || idToken.length < 20 || idToken.length > 4096) return "";
   /* sin cuenta de servicio no hay cómo leer Firestore (y así los tokens
      "dev:" de lookupUser nunca dan Pro) */
-  if (!env.FIREBASE_SA) return false;
+  if (!env.FIREBASE_SA) return "";
   const now = Date.now();
   const th = await sha256Hex(idToken);
   const hit = cacheGet(acctByToken, th, now);
-  if (hit) return hit.pro;
+  if (hit) return hit.pro ? hit.who : "";
 
   /* Antes de llamar a Google: tope por IP. Tokens inventados (uno distinto
      cada vez) no salen de la caché; sin esto cada uno sería una llamada a
      Identity Toolkit, que también usan exámenes y libros. */
   const rl = await rateHit(env, "chat-auth:" + ipRateKey(ip),
     limitOf(env, "RL_CHAT_AUTH_PER_MIN"), limitOf(env, "RL_CHAT_AUTH_PER_DAY"), true);
-  if (!rl.ok) return false;
+  if (!rl.ok) return "";
 
   let user;
   try { user = await lookupUser(env, idToken, true); }
   catch (e) {
     console.warn("chat Pro por cuenta: Identity Toolkit falló:", e && e.message);
     cachePut(acctByToken, th, { pro: false, exp: now + ACCT_FAIL_TTL_MS }, now);
-    return false;
+    return "";
   }
   const tExp = user ? tokenExpMs(idToken) : 0;
   const exp = tExp > now ? Math.min(now + ACCT_TTL_MS, tExp) : now + ACCT_TTL_MS;
   if (!user || !user.verified || !user.email) {
     cachePut(acctByToken, th, { pro: false, exp: exp }, now);
-    return false;
+    return "";
   }
 
   const uk = user.uid + "|" + user.email;
   const uh = cacheGet(acctByUid, uk, now);
   if (uh) {
-    cachePut(acctByToken, th, { pro: uh.pro, exp: Math.min(exp, uh.exp) }, now);
-    return uh.pro;
+    cachePut(acctByToken, th, { pro: uh.pro, who: user.email, exp: Math.min(exp, uh.exp) }, now);
+    return uh.pro ? user.email : "";
   }
 
   let pro;
@@ -583,18 +599,43 @@ async function accountPro(env, idToken, ip) {
     const g = u1.ok ? await rateHit(env, "chat-auth-global", 0, limitOf(env, "RL_CHAT_AUTH_GLOBAL_PER_DAY"), true) : u1;
     if (!g.ok) {   // tope agotado: "no" corto, para no repetir Identity Toolkit en cada mensaje
       cachePut(acctByToken, th, { pro: false, exp: now + ACCT_FAIL_TTL_MS }, now);
-      return false;
+      return "";
     }
     try { pro = await enrolledOrStaff(env, user.email); }
     catch (e) {
       console.warn("chat Pro por cuenta: Firestore falló:", e && e.message);
       cachePut(acctByToken, th, { pro: false, exp: now + ACCT_FAIL_TTL_MS }, now);
-      return false;
+      return "";
     }
   }
   cachePut(acctByUid, uk, { pro: pro, exp: now + ACCT_TTL_MS }, now);
-  cachePut(acctByToken, th, { pro: pro, exp: exp }, now);
-  return pro;
+  cachePut(acctByToken, th, { pro: pro, who: user.email, exp: exp }, now);
+  return pro ? user.email : "";
+}
+
+/* Topes de Pro (2026-11-25), dos contadores estrictos (si el contador falla,
+ * false). Quien llama baja el mensaje a gratis (Haiku): pasarse del tope nunca
+ * es un error para el alumno.
+ *  - proAcctAllowed: tope de la cuenta (`acct` = correo validado por
+ *    accountPro). Va ANTES del límite por IP, para que un mensaje bajado a
+ *    gratis cuente en el contador por IP de gratis (no en el de Pro, más
+ *    holgado). Una petición que luego rechace el límite por IP o Turnstile sí
+ *    gasta cupo de ESA cuenta, nunca el de los demás.
+ *  - proGlobalAllowed: tope global de Pro (cuentas + código Pro). Va DESPUÉS
+ *    del límite por IP, de Turnstile y del tope global del chat: solo cuentan
+ *    los mensajes que de verdad se van a responder. Antes iba primero, y una
+ *    ráfaga rechazada (429/401) con el código Pro o con unas pocas cuentas
+ *    agotaba el cupo y dejaba a toda la escuela en Haiku (revisión 2026-11-25). */
+async function proAcctAllowed(env, acct) {
+  const a = await rateHit(env, "pro-acct:" + acct, 0, limitOf(env, "RL_PRO_ACCT_PER_DAY"), true);
+  if (!a.ok) console.warn("chat Pro: tope diario de la cuenta (" + (a.scope || "?") + "), pasa a gratis");
+  return !!a.ok;
+}
+
+async function proGlobalAllowed(env) {
+  const g = await rateHit(env, "pro-global", 0, limitOf(env, "RL_PRO_GLOBAL_PER_DAY"), true);
+  if (!g.ok) console.warn("chat Pro: tope global de Pro (" + (g.scope || "?") + "), pasa a gratis");
+  return !!g.ok;
 }
 
 /* ---------- Durable Object: contador por clave ----------
@@ -753,6 +794,39 @@ export default {
       });
     }
 
+    /* ── Escrituras públicas sin cuenta (lead_server.js) ──
+     * Sustituyen el `create` abierto de placement_results y app_events en las
+     * reglas: aquí cuentan por IP y en un tope global, y escribe la cuenta de
+     * servicio. Contadores estrictos (si fallan, 503 y no se escribe). */
+    if (path === "/lead/placement" || path === "/report/ai") {
+      const ipL = ipBucket(request.headers.get("CF-Connecting-IP"));
+      let lb;
+      try {
+        const t = await readCapped(request, 8000);
+        if (t === null) return jsonError(413, "Petición demasiado grande.", origin);
+        lb = JSON.parse(t);
+      } catch (e) {
+        return jsonError(400, "Cuerpo JSON inválido.", origin);
+      }
+      if (!lb || typeof lb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+      let out;
+      const guardL = { down: false };
+      try {
+        out = await handleLead(path, lb, env,
+          strictRate(env, guardL, ipRateKey(ipL)),
+          strictRate(env, guardL, ""),
+          (name) => limitOf(env, name));
+      } catch (e) {
+        console.error("lead:", e && e.message);
+        out = [500, { error: "Error del servidor.", code: "error" }];
+      }
+      out = fixUnavailable(out, guardL, "envíos");
+      return new Response(JSON.stringify(out[1]), {
+        status: out[0],
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), retryHeader(out))
+      });
+    }
+
     if (path.indexOf("/exam/") === 0) {
       const ipE = ipBucket(request.headers.get("CF-Connecting-IP"));
       let eb;
@@ -818,13 +892,19 @@ export default {
     const codePro = !!env.PRO_CODE && safeEqual(proCode, env.PRO_CODE);
     /* O por cuenta: alumno inscrito, profesor o staff (ver accountPro). Con
      * código válido no se consulta nada. Si falla, gratis (nunca 500). */
-    let acctPro = false;
+    let acct = "";
     if (!codePro && body.idToken) {
-      try { acctPro = await accountPro(env, body.idToken, ip); }
-      catch (e) { console.warn("chat Pro por cuenta:", e && e.message); }
+      try { acct = await accountPro(env, body.idToken, ip); }
+      catch (e) { console.warn("chat Pro por cuenta:", e && e.message); acct = ""; }
     }
-    const isPro = codePro || acctPro;
-    const tier = isPro ? "pro" : "free";
+    let isPro = codePro || !!acct;
+    /* Tope de Pro por cuenta (proAcctAllowed): pasado el tope, o si el
+     * contador falla, este mensaje va con Haiku. El tope global de Pro se
+     * cuenta más abajo, ya pasadas todas las barreras. */
+    if (isPro && !codePro) {
+      try { isPro = await proAcctAllowed(env, acct); }
+      catch (e) { console.warn("chat Pro: tope falló:", e && e.message); isPro = false; }
+    }
 
     /* ── Límite por IP (minuto + día) ──
      * Pro usa su propio contador con más margen, para que un alumno con
@@ -869,6 +949,17 @@ export default {
       return jsonError(503, "Vesper está descansando por hoy (límite diario del servicio). Vuelve mañana.",
         origin, "busy", { "Retry-After": String(global.retryAfter || 3600) });
     }
+
+    /* ── Tope global de Pro (proGlobalAllowed) ──
+     * Al final, como el tope global: ninguna petición rechazada gasta cupo de
+     * Pro. Pasado el tope (o con el contador caído), Haiku. El mensaje ya contó
+     * en el contador por IP de Pro, que es más holgado: se acepta, el tope
+     * global del chat sigue acotando el total. */
+    if (isPro) {
+      try { isPro = await proGlobalAllowed(env); }
+      catch (e) { console.warn("chat Pro: tope global falló:", e && e.message); isPro = false; }
+    }
+    const tier = isPro ? "pro" : "free";
 
     /* Construye la petición a Claude — modelo y max_tokens fijados aquí. */
     const payload = {

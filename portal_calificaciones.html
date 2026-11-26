@@ -356,7 +356,17 @@ footer a{color:var(--gold);text-decoration:none;}
   function detailHtml(r) {
     if (r.bySkill && (!r.detail || !r.detail.length)) {
       return '<div class="detailbox">' + skillSummaryHtml([], r.bySkill) +
-             '<h4>Detalle por pregunta</h4><div class="qlist"><div class="qitem">El examen de nivel no guarda qué preguntas falló cada alumno, para que nadie pueda sacar la clave repitiéndolo. Arriba está su resultado por destreza.</div></div></div>';
+             '<h4>Detalle por pregunta</h4><div class="qlist"><div class="qitem">De este intento solo se guardó el resultado por destreza, no qué preguntas falló.</div></div></div>';
+    }
+    if ((!r.detail || !r.detail.length) && isLevelExam(r)) {
+      /* desde 2026-11-25 el desglose del examen de nivel vive en
+         exam_results_staff y se pide al abrir el detalle (openStaffDetail) */
+      var st = r._staff;
+      var msg = st === "loading" ? "Cargando el desglose…"
+        : st === "missing" ? "Este intento no tiene desglose guardado."
+        : st === "error" ? "El desglose de este examen de nivel no se pudo leer. Vuelve a abrirlo; si sigue igual, avisa al administrador (regla <code>exam_results_staff</code>)."
+        : "Abre el detalle para cargar el desglose.";
+      return '<div class="detailbox"><h4>Detalle</h4><div class="qlist"><div class="qitem">' + msg + '</div></div></div>';
     }
     if (!r.detail || !r.detail.length) {
       return '<div class="detailbox"><h4>Detalle</h4><div class="qlist"><div class="qitem">Sin detalle por pregunta para este intento.</div></div></div>';
@@ -421,8 +431,39 @@ footer a{color:var(--gold);text-decoration:none;}
     if (!tr) return;
     var i = tr.getAttribute("data-i");
     var dr = rowsEl.querySelector('tr.detailrow[data-d="' + i + '"]');
-    if (dr) dr.style.display = (dr.style.display === "none") ? "" : "none";
+    if (!dr) return;
+    dr.style.display = (dr.style.display === "none") ? "" : "none";
+    if (dr.style.display === "") openStaffDetail(rowsEl._rows && rowsEl._rows[+i], dr);
   });
+
+  function isLevelExam(r) {
+    return !!r && r.examType === "exam" && /^exam:(A1|A2|B1|B2|C1|C2)$/.test(r.examId || "");
+  }
+
+  /* Examen de nivel sin desglose en su doc (desde 2026-11-25): lo pide a
+     exam_results_staff/{mismo id} al abrir el detalle, una sola vez por fila
+     (1 lectura). Un fallo se puede reintentar cerrando y abriendo. Los
+     resultados viejos traen su bySkill/detail y no piden nada. */
+  function openStaffDetail(r, dr) {
+    if (!isLevelExam(r) || (r.detail && r.detail.length) || r.bySkill) return;
+    if (r._staff === "loading" || r._staff === "missing") return;
+    if (!r.id || !window.VESPER_RESULTS || !VESPER_RESULTS.fetchStaffDoc) { r._staff = "error"; paint(); return; }
+    r._staff = "loading"; paint();
+    VESPER_RESULTS.fetchStaffDoc(r.id).then(function (x) {
+      if (x === "missing") r._staff = "missing";
+      else if (!x) r._staff = "error";
+      else {
+        r._staff = "ok";
+        if (x.detail && x.detail.length) r.detail = x.detail;
+        if (x.bySkill) r.bySkill = x.bySkill;
+      }
+      paint();
+    });
+    function paint() {
+      var td = dr && dr.firstChild;
+      if (td) td.innerHTML = detailHtml(r);
+    }
+  }
 
   fType.addEventListener("change", render);
   fQ.addEventListener("input", render);

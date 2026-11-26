@@ -49,6 +49,19 @@ Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código co
 | `RL_PRO_PER_MIN` | 30 | mensajes/minuto por IP, con código Pro válido |
 | `RL_PRO_PER_DAY` | 1000 | mensajes/día por IP, con código Pro válido |
 | `RL_GLOBAL_PER_DAY` | 2000 | mensajes/día en total (freno de mano del costo) |
+| `RL_PRO_ACCT_PER_DAY` | 100 | mensajes Pro/día por cuenta (Pro por cuenta, 2026-11-25) |
+| `RL_PRO_GLOBAL_PER_DAY` | 300 | mensajes Pro/día en total (cuentas + código Pro) |
+
+**Topes de Pro (2026-11-25):** desde que los alumnos inscritos tienen Pro sin
+código, un script con la sesión de una sola cuenta podía gastar los 20 USD del
+mes en menos de una hora (Sonnet, ~0.03 USD por mensaje en el peor caso). Ahora
+cada cuenta tiene `RL_PRO_ACCT_PER_DAY` mensajes Pro al día (clave: el correo
+del token validado) y todo Pro junto `RL_PRO_GLOBAL_PER_DAY`. Pasado el tope, o
+si el contador falla, el mensaje se responde con **Haiku** (`X-Vesper-Tier:
+free`): el alumno nunca ve un error por esto. El tope por cuenta se cuenta antes
+del límite por IP (un mensaje bajado a gratis usa el contador por IP de gratis);
+el tope global de Pro, al final, después de Turnstile y del tope global, para
+que ninguna petición rechazada gaste el cupo de Pro de toda la escuela.
 
 Además, antes de llamar a Claude el Worker recorta la entrada (2026-11):
 `MAX_SYSTEM_CHARS` 4000, `MAX_MESSAGE_CHARS` 3000 por mensaje y
@@ -89,6 +102,18 @@ que corta el stream en cuanto pasa del tope (también a cuerpos *chunked* sin
 `/doc/get` y `/book/open` 8000, `/exam/*` 20000, chat `MAX_BODY_CHARS` 200000.
 El corte del stream es en bytes a 4× ese número (un carácter ocupa como mucho
 3 bytes en UTF-8), así que nunca corta un cuerpo válido.
+
+**Escrituras públicas sin cuenta (2026-11-25, `lead_server.js`):**
+`POST /lead/placement` (resultado de `book_placement.html`) y `POST /report/ai`
+("Reportar" en `chat.html` y `entrevista.html`). Antes esas páginas escribían
+directo en Firestore con un `create` abierto en las reglas: la forma estaba
+acotada pero la cantidad no, y un script podía agotar la cuota diaria de
+escrituras. Ahora el Worker valida la misma forma, cuenta por IP
+(`RL_LEAD_PER_MIN` 15, `RL_LEAD_PER_DAY` 40; `RL_REPORT_PER_MIN` 5,
+`RL_REPORT_PER_DAY` 30) y en un tope global (`RL_LEAD_GLOBAL_PER_DAY` y
+`RL_REPORT_GLOBAL_PER_DAY`, 300), y escribe con `FIREBASE_SA`. Contadores
+estrictos (si fallan, `503` y no escribe). Cuerpo máximo 8000 caracteres.
+Las reglas de `placement_results` y `app_events` pasan a `create: if false`.
 
 **`/book/page` no cuenta, a propósito:** contar cada página sería una llamada
 más al Durable Object (costo). El control es la firma HMAC que da
@@ -267,8 +292,12 @@ esas notas si llegan desde el navegador.
 Contra la "cosecha" de claves (2026-11-23):
 
 - **Examen de nivel:** `/exam/answer` solo responde `{recorded, first}`: ni la
-  clave ni si acertó. `/exam/finish` da la nota y `bySkill` (resumen por
-  habilidad), sin `detail` por pregunta. Desde el 2026-11-23 Firestore tampoco
+  clave ni si acertó. `/exam/finish` da solo la nota global, el nivel y si
+  aprobó (desde 2026-11-25, opción A: sin `bySkill` ni `detail`). El desglose
+  (`bySkill` y `detail` por pregunta) se guarda con la cuenta de servicio en
+  `exam_results_staff/{mismo id que exam_results}`, que solo leen staff y el
+  profesor del grupo; si ese segundo guardado falla, la nota ya quedó y la app
+  repite el finish (`save_failed`). Antes de esta fecha: Desde el 2026-11-23 Firestore tampoco
   guarda `detail` del examen de nivel, sino `bySkill`: el alumno puede leer su
   propio `exam_results`, y con 4 intentos (todo A, B, C, D) sacaba la clave de
   ahí. El profesor ve el resumen por destreza en `portal_calificaciones.html`.
@@ -282,7 +311,15 @@ Contra la "cosecha" de claves (2026-11-23):
   (`RL_EXAM_LEVEL_START_PER_DAY_IP`, antes 150). La nota final sigue siendo
   un oráculo lento (cambiar una respuesta por intento); el tope lo hace
   tardar semanas. Una escuela o un CGNAT de celular comparten IP: esos alumnos
-  deben entrar con su cuenta, o se sube el valor en `[vars]`.
+  deben entrar con su cuenta, o se sube el valor en `[vars]`. Desde el
+  2026-11-25, con cuenta se cuenta **además** por IP, en un contador propio
+  (`RL_EXAM_LEVEL_START_PER_DAY_IP_UID`, 60): muchas cuentas desde un mismo
+  equipo ya no suman 12 intentos cada una.
+- **Examen incompleto (2026-11-25):** si al cerrar falta alguna pregunta,
+  `/exam/finish` responde `{incomplete: true, answered, total, passed: false}`
+  sin `score`, `percent`, `bySkill` ni `detail`, y no guarda nada. Antes,
+  contestar una pregunta por destreza y cerrar decía, por `bySkill`, si cada
+  respuesta era buena. La app siempre contesta todas antes de cerrar.
 - **Dueño del intento:** `/exam/start` guarda el uid del idToken; `/exam/finish`
   solo guarda la nota si el idToken es de esa misma cuenta (`why:
   "anonymous_start"` / `"not_owner"` si no).

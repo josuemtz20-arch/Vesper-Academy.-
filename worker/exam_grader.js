@@ -19,9 +19,13 @@
  *           chico: no devuelve ni la clave ni ✓/✗ (con el veredicto por
  *           pregunta, 3-4 intentos reconstruían la clave; 2026-11-23).
  *   /exam/finish {attemptId, idToken?, alias?}
- *        -> {score, total, percent, passed, threshold, saved} + en el jefe
- *           `detail` por pregunta; en el examen de nivel `bySkill` en su lugar
- *           (ver publicResult). La nota la
+ *        -> {score, total, percent, passed, threshold, level, saved} + en el
+ *           jefe `detail` por pregunta. En el examen de nivel, solo la nota
+ *           global (2026-11-25, opción A): ni `detail` ni `bySkill`; el
+ *           desglose se guarda aparte en exam_results_staff (ver publicResult
+ *           y toStaffDoc). Examen de nivel con preguntas sin contestar:
+ *           {incomplete:true, answered, total, passed:false}, sin nota ni
+ *           bySkill, y no se guarda (2026-11-25). La nota la
  *           calcula el Worker con lo registrado y la guarda él mismo en
  *           Firestore (exam_results, gradedBy "worker") con la cuenta de
  *           servicio, SOLO si el idToken es de la misma cuenta que abrió el
@@ -60,7 +64,12 @@ export const EXAM_RATE_DEFAULTS = {
      escuela o un NAT de operador (CGNAT en celular) comparte IP; esos alumnos deben
      entrar con su cuenta (contador por uid, no por IP). Se sube con [vars] sin tocar código. */
   RL_EXAM_LEVEL_START_PER_DAY: 12,
-  RL_EXAM_LEVEL_START_PER_DAY_IP: 20
+  RL_EXAM_LEVEL_START_PER_DAY_IP: 20,
+  /* 2026-11-25: con cuenta también se cuenta por IP (antes solo por uid, y
+     varias cuentas desde un equipo sumaban 12 cada una). Contador aparte del
+     anónimo y más holgado: un salón de ~30 alumnos con cuenta comparte IP y no
+     debe quedarse sin examen porque alguien sin cuenta gastó el cupo. */
+  RL_EXAM_LEVEL_START_PER_DAY_IP_UID: 60
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -132,16 +141,21 @@ export class ExamAttempt extends DurableObject {
     if (await this.ctx.storage.get("a")) return { ok: false, error: "exists" };
     /* uid: la cuenta que abrió el intento ("" si fue sin sesión). Solo esa
        cuenta puede guardar la nota en /exam/finish. */
-    await this.ctx.storage.put("a", { kind: a.kind, level: a.level, ids: a.ids, uid: a.uid || "", answered: {}, order: [], created: Date.now(), result: null });
+    /* v: versión de las claves con que se abrió (2026-11-25). Los ids son
+       posicionales (e:A1:007): si cambia el banco, el mismo id es OTRA
+       pregunta, así que un intento abierto con otra versión no se puede seguir
+       calificando (ver answer y finish). */
+    await this.ctx.storage.put("a", { kind: a.kind, level: a.level, ids: a.ids, uid: a.uid || "", v: a.v || "", answered: {}, order: [], created: Date.now(), result: null });
     await this.ctx.storage.setAlarm(Date.now() + ATTEMPT_TTL_MS);
     return { ok: true };
   }
   /* registra el veredicto; si la pregunta ya se contestó, gana el primero */
-  async answer(id, ok) {
+  async answer(id, ok, v) {
     const a = await this.ctx.storage.get("a");
     if (!a) return { error: "no_attempt" };
     if (a.result) return { error: "finished" };
     if (a.ids.indexOf(id) < 0) return { error: "not_in_attempt" };
+    if (v !== undefined && a.v !== v) return { error: "stale" };
     if (Object.prototype.hasOwnProperty.call(a.answered, id)) return { ok: a.answered[id], first: false };
     a.answered[id] = ok; a.order.push(id);
     await this.ctx.storage.put("a", a);
@@ -310,12 +324,16 @@ async function studentIdentity(token, email) {
 }
 
 /* mismo documento que toFs() de vesper_results.js, + gradedBy.
-   Examen de nivel (2026-11-23): NO se guarda `detail` (con ✓/✗ por
-   pregunta): el alumno puede leer su propio exam_results, y con 4 intentos
-   (todo A, B, C, D) sacaba la clave del banco fijo. En su lugar va `bySkill`
-   ({grammar:{correct,total},…}), lo mismo que ya recibe el navegador. El
-   profesor ve el resumen por destreza, no qué preguntas falló. El jefe
-   sigue guardando `detail`: sus preguntas se sortean y muestra "Era: …". */
+   Examen de nivel: el alumno puede leer su propio exam_results, así que ahí
+   solo va la nota global (score, total, percent, passed, nivel). Ni `detail`
+   (✓/✗ por pregunta: con 4 intentos, todo A, B, C, D, salía la clave) ni,
+   desde 2026-11-25 (opción A de Josue), `bySkill`: con relleno seguro-malo y
+   una pregunta de prueba por destreza, cada intento completo decía el
+   veredicto de 5 preguntas. El desglose va a exam_results_staff (toStaffDoc),
+   que el alumno no puede leer.
+   El jefe sigue guardando `detail` aquí: /exam/answer ya le revela la clave de
+   cada pregunta ("Era: …") y sus preguntas se sortean, así que `detail` no le
+   dice nada que no sepa ya. */
 function toFsDoc(rec) {
   const S = (v) => ({ stringValue: String(v) }), I = (v) => ({ integerValue: String(v) });
   const fields = {
@@ -326,15 +344,48 @@ function toFsDoc(rec) {
     createdAt: { timestampValue: rec.clientTs }, clientTs: S(rec.clientTs),
     gradedBy: S("worker")
   };
-  if (rec.examType === "exam") {
-    const by = rec.bySkill || {}, m = {};
-    Object.keys(by).forEach((k) => { m[k] = { mapValue: { fields: { correct: I(by[k].correct), total: I(by[k].total) } } }; });
-    fields.bySkill = { mapValue: { fields: m } };
-  } else {
-    fields.detail = { arrayValue: { values: rec.detail.map((d) => ({ mapValue: { fields: {
-      q: S(d.q), type: S(d.type), skill: S(d.skill), correct: { booleanValue: d.correct } } } })) } };
-  }
+  if (rec.examType !== "exam") fields.detail = detailField(rec.detail);
   return { fields: fields };
+}
+
+function detailField(detail) {
+  const S = (v) => ({ stringValue: String(v) });
+  return { arrayValue: { values: (detail || []).map((d) => ({ mapValue: { fields: {
+    q: S(d.q), type: S(d.type), skill: S(d.skill), correct: { booleanValue: d.correct } } } })) } };
+}
+
+/* Desglose del examen de nivel, solo para staff y el profesor del grupo
+   (exam_results_staff/{el mismo id que exam_results}; las reglas no dejan
+   leerlo al alumno ni escribirlo a nadie: solo esta cuenta de servicio).
+   Lleva group/studentUid/sid para la regla y para buscarlo, y el desglose:
+   bySkill y detail por pregunta. */
+function toStaffDoc(rec) {
+  const S = (v) => ({ stringValue: String(v) }), I = (v) => ({ integerValue: String(v) });
+  const by = rec.bySkill || {}, m = {};
+  Object.keys(by).forEach((k) => { m[k] = { mapValue: { fields: { correct: I(by[k].correct), total: I(by[k].total) } } }; });
+  return { fields: {
+    studentUid: S(rec.studentUid), alias: S(rec.alias), sid: S(rec.sid), group: S(rec.group),
+    examType: S(rec.examType), examId: S(rec.examId), level: S(rec.level),
+    score: I(rec.score), total: I(rec.total), percent: I(rec.percent),
+    createdAt: { timestampValue: rec.clientTs }, clientTs: S(rec.clientTs),
+    gradedBy: S("worker"),
+    bySkill: { mapValue: { fields: m } },
+    detail: detailField(rec.detail)
+  } };
+}
+
+/* crea `col/docId`; ya existente = guardado (idempotente) */
+async function createOnce(token, col, docId, doc) {
+  const r = await fetch(fsBase() + "/" + col + "?documentId=" + encodeURIComponent(docId), {
+    method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify(doc)
+  });
+  if (r.ok) return;
+  const text = await r.text();
+  /* ya estaba: un intento anterior sí llegó aunque no lo supimos. Se mira el
+     texto porque Firestore también usa 409 para ABORTED, que sí es un fallo */
+  if (r.status === 409 && text.indexOf("ALREADY_EXISTS") >= 0) return;
+  throw new Error(col + " " + r.status + " " + text.slice(0, 200));
 }
 
 async function saveResult(env, user, alias, res, docId, ts) {
@@ -352,17 +403,22 @@ async function saveResult(env, user, alias, res, docId, ts) {
     clientTs: ts   /* la hora del cierre, no la del reintento */
   });
   const doc = toFsDoc(rec);
-  if (dry) return { saved: false, why: "dry_run", doc: doc, saChecked: hasSa };
-  const r = await fetch(fsBase() + "/exam_results?documentId=" + encodeURIComponent(docId), {
-    method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
-    body: JSON.stringify(doc)
-  });
-  if (r.ok) return { saved: true };
-  const text = await r.text();
-  /* ya estaba: un intento anterior sí llegó aunque no lo supimos. Se mira el
-     texto porque Firestore también usa 409 para ABORTED, que sí es un fallo */
-  if (r.status === 409 && text.indexOf("ALREADY_EXISTS") >= 0) return { saved: true };
-  throw new Error("exam_results " + r.status + " " + text.slice(0, 200));
+  const staff = rec.examType === "exam" ? toStaffDoc(rec) : null;
+  if (dry) return { saved: false, why: "dry_run", doc: doc, staffDoc: staff, saChecked: hasSa };
+  /* primero la nota del alumno: si el desglose falla después, la nota ya
+     quedó (y un reintento la encuentra con ALREADY_EXISTS) */
+  await createOnce(token, "exam_results", docId, doc);
+  if (!staff) return { saved: true };
+  try { await createOnce(token, "exam_results_staff", docId, staff); }
+  catch (e) {
+    console.error("exam save staff:", e && e.message);
+    /* La nota está guardada (saved: true) pero el desglose no: se contesta
+       why "save_failed" para que la app repita el mismo finish (lo hace con
+       save_failed, también la versión vieja de la app) y el intento sigue
+       "pending" en el DO hasta que los dos documentos estén. */
+    return { saved: true, staffSaved: false, why: "save_failed" };
+  }
+  return { saved: true };
 }
 
 /* guarda la nota de un intento ya cerrado que sigue "pending". `first` = es el
@@ -373,7 +429,7 @@ async function saveAttempt(env, stub, att, body, first) {
     const out = (!user || user.uid !== att.uid)
       ? { saved: false, why: "not_owner" }
       : await saveResult(env, user, cleanAlias(body.alias), att.result, att.docId, att.closedAt);
-    if (out.saved) await stub.markSave("done");
+    if (out.saved && out.staffSaved !== false) await stub.markSave("done");
     else if (first && (out.why === "not_owner" || out.why === "no_session")) await stub.markSave("none");
     return out;
   } catch (e) {
@@ -428,7 +484,7 @@ async function start(env, body, user) {
     }
   }
   const attemptId = kind + "." + level + "." + randomId();
-  const r = await attemptStub(env, attemptId).init({ kind, level, ids, uid: (user && user.verified && user.uid) || "" });
+  const r = await attemptStub(env, attemptId).init({ kind, level, ids, uid: (user && user.verified && user.uid) || "", v: KEYS.version });
   if (!r.ok) return [500, { error: "No se pudo abrir el examen." }];
   const out = { attemptId: attemptId, total: ids.length };
   if (kind === "boss") out.ids = ids;   // la app pinta ESTAS preguntas, en este orden
@@ -443,8 +499,9 @@ async function answer(env, body) {
   if (!ex) return [400, { error: "Pregunta inválida." }];
   const ok = grade(ex, body.response);
   if (ok === null) return [400, { error: "Respuesta con formato inválido." }];
-  const st = await attemptStub(env, at.id).answer(body.id, ok);
+  const st = await attemptStub(env, at.id).answer(body.id, ok, KEYS.version);
   if (st.error === "no_attempt") return [404, { error: "El examen caducó. Empieza de nuevo.", code: "expired" }];
+  if (st.error === "stale") return [409, { error: "Hay una versión nueva de los exámenes. Recarga la página y empieza de nuevo.", code: "stale" }];
   if (st.error) return [409, { error: "Esa pregunta no es de este examen.", code: st.error }];
   /* Examen de nivel: banco fijo y chico (26–31 preguntas, todas en cada
      intento), así que NO sale ni la clave ni el veredicto: solo "registrada".
@@ -462,9 +519,31 @@ async function finish(env, body) {
   const stub = attemptStub(env, at.id);
   let a = await stub.state();
   if (!a) return [404, { error: "El examen caducó.", code: "expired" }];
+  /* intento abierto con otras claves (cambió el banco): sus respuestas se
+     calificaron contra preguntas que ya no son esas ids; no se cierra ni se
+     guarda. Uno ya cerrado conserva su nota. */
+  if (!a.result && a.v !== KEYS.version) return [409, { error: "Hay una versión nueva de los exámenes. Recarga la página y empieza de nuevo.", code: "stale" }];
   const bank = bankOf(at.kind, at.level);
   let res = a.result;
-  if (!res) {
+  /* Examen de nivel INCOMPLETO (2026-11-25): si falta alguna pregunta, el
+     resultado no lleva nota, ni bySkill, ni detail, y no se guarda. Con la nota
+     o el resumen por destreza de un intento a medias, contestar UNA pregunta
+     por destreza y cerrar decía si esa respuesta era buena: un oráculo de la
+     clave. La app siempre contesta todas antes de cerrar (el botón Verificar
+     no deja avanzar sin respuesta registrada), así que esto solo lo ve quien
+     cierra a mano. */
+  const incomplete = !res && at.kind === "exam" && a.ids.some((id) => !Object.prototype.hasOwnProperty.call(a.answered, id));
+  if (!res && incomplete) {
+    const inc = {
+      examType: at.kind, examId: at.kind + ":" + at.level, level: at.level,
+      incomplete: true, answered: a.order.length, total: Math.max(1, a.ids.length),
+      threshold: bank.pass, passed: false
+    };
+    const closed = await stub.close(inc, false);
+    if (!closed) return [404, { error: "El examen caducó.", code: "expired" }];
+    a = closed;
+    res = closed.result;
+  } else if (!res) {
     /* Las no contestadas cuentan como malas: antes el jefe dividía entre las
        contestadas y bastaba UNA buena + /exam/finish para sacar 100. */
     const total = Math.max(1, a.ids.length);
@@ -499,8 +578,19 @@ async function finish(env, body) {
   let save;
   if (a.first && !body.idToken) save = { saved: false, why: "no_session" };
   else if (a.first && !a.uid) save = { saved: false, why: "anonymous_start" };
+  else if (res.incomplete) save = { saved: false, why: a.first ? "incomplete" : "already_finished" };
   else if (a.save === "done") save = { saved: true };
   else if (a.save === "pending" && body.idToken) save = await saveAttempt(env, stub, a, body, !!a.first);
+  /* Reintento SIN token de un guardado que sigue pendiente (p. ej. la sesión
+     no estaba lista al recargar): no se cierra nada y se contesta save_failed,
+     que la app trata como "vuelve a intentarlo" (examRetrySave y la cola de
+     pendientes). Con "already_finished" la app sacaba el intento de la cola y
+     la nota o el desglose de staff no llegaban nunca. Solo existe "pending" si
+     el PRIMER cierre traía token: no abre la puerta a ver la nota y decidir
+     después si se guarda. En local (dry run) nada llega a guardarse y el
+     intento se queda "pending" para siempre: ahí sigue already_finished. */
+  else if (a.save === "pending" && !(env.EXAM_DEV === "1" && (!env.FIREBASE_SA || env.EXAM_DRY_WRITE === "1")))
+    save = { saved: false, why: "save_failed", pending: true };
   else save = { saved: false, why: "already_finished" };
   return [200, Object.assign(publicResult(res), publicSave(res, save))];
 }
@@ -517,24 +607,32 @@ function skillSummary(bank, ids, answered) {
   });
   return out;
 }
-/* Lo que el NAVEGADOR recibe al cerrar. En el examen de nivel se quita la
+/* Lo que el NAVEGADOR recibe al cerrar. Un examen de nivel incompleto no
+   lleva nota ni bySkill (ver finish). En el examen de nivel se quita la
    lista por pregunta (`detail`, con `correct`): junto con un intento hecho a
-   propósito (todo A, todo B…) volvía a soltar la clave. Queda la nota y el
-   resumen por habilidad. El documento de Firestore (toFsDoc) tampoco lo
-   guarda desde 2026-11-23 (el alumno puede leer su propio exam_results):
-   guarda `bySkill`. Los documentos de antes de esa fecha sí traen `detail`. */
+   propósito (todo A, todo B…) volvía a soltar la clave. Desde 2026-11-25
+   tampoco va `bySkill` (opción A: el alumno ve su nota y su nivel; el
+   desglose por destreza es solo para staff, en exam_results_staff). Los
+   documentos anteriores traen `bySkill` (desde 2026-11-23) o `detail`. */
 function publicResult(res) {
   const out = Object.assign({}, res);
-  if (res.examType === "exam") delete out.detail;
+  if (res.examType === "exam") { delete out.detail; delete out.bySkill; }
+  if (res.incomplete) { delete out.score; delete out.percent; }
   return out;
 }
 /* en local (dry_run) `save.doc` es el documento que se habría escrito: en el
-   examen de nivel va sin `detail` por la misma razón */
+   examen de nivel va sin `detail` ni `bySkill` por la misma razón, y el
+   documento de staff (`staffDoc`) nunca sale al navegador: solo se dice si
+   se habría escrito (`staffDoc: true`). */
 function publicSave(res, save) {
-  if (res.examType !== "exam" || !save || !save.doc || !save.doc.fields) return save;
-  const fields = Object.assign({}, save.doc.fields);
-  delete fields.detail;
-  return Object.assign({}, save, { doc: Object.assign({}, save.doc, { fields: fields }) });
+  if (!save) return save;
+  const out = Object.assign({}, save);
+  if ("staffDoc" in out) out.staffDoc = !!out.staffDoc;
+  if (res.examType !== "exam" || !out.doc || !out.doc.fields) return out;
+  const fields = Object.assign({}, out.doc.fields);
+  delete fields.detail; delete fields.bySkill;
+  out.doc = Object.assign({}, out.doc, { fields: fields });
+  return out;
 }
 
 /* punto de entrada desde el fetch del Worker. `rate(key, perMin, perDay)`
@@ -560,16 +658,23 @@ export async function handleExam(path, body, env, rate, limitOf, rateRaw) {
     /* examen de nivel: tope diario de intentos nuevos, ANTES de crear el
        intento (si no, un rechazo dejaba un ExamAttempt huérfano con su
        alarma de 24 h). startCheck ya pasó, así que los 400/409/404 no gastan
-       cupo. Con uid verificado, clave solo por uid (sin IP, para que el tope
-       no se reinicie al cambiar de red); si no, solo IP con tope alto (esos
-       intentos ya no se guardan). start() no valida nada que dependa del DO:
+       cupo. Con uid verificado, por uid (el tope no se reinicia al cambiar de
+       red) Y por IP con un contador propio más holgado (2026-11-25: muchas
+       cuentas desde un mismo equipo ya no suman 12 intentos cada una); sin
+       sesión, solo por IP (esos intentos no se guardan). start() no valida nada que dependa del DO:
        lo único que puede rechazar después (devIds, solo jefe en local) no
        pasa por este tope. */
     if (body.kind === "exam") {
       const rl2 = user && user.verified && user.uid
         ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
         : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
+      /* con cuenta, además por IP (2026-11-25): uid primero, para que quien ya
+         agotó su cupo no gaste el de su salón */
+      const rl3 = rl2.ok && user && user.verified && user.uid
+        ? await rate("exam-level-start-uid", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP_UID"))
+        : rl2;
       if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
+      if (!rl3.ok) return [429, { error: "Hoy ya se hicieron varios intentos del examen de nivel desde esta red. Vuelve mañana.", code: "rate_limited", retryAfter: rl3.retryAfter || 3600 }];
     }
     return start(env, body, user);
   }

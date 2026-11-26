@@ -952,7 +952,36 @@ function saveLocalHistory(list) {
     try { localStorage.setItem(LS_KEY, JSON.stringify(list.slice(0, 100))); } catch (e) {}
 }
 
+// 2026-11-25: el lead se guarda a través del Worker (POST /lead/placement), que
+// cuenta por IP y en un tope global y escribe con la cuenta de servicio: un
+// script ya no puede agotar la cuota de Firestore creando leads en bucle. Si el
+// Worker falla (o aún no tiene la ruta), se intenta como antes, directo; cuando
+// las reglas cierren el create, ese respaldo solo devuelve 403 y se puede quitar.
+const LEAD_API = String(window.VESPER_LEAD_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/lead/placement";
+
+function saveResultViaWorker(rec) {
+    return fetch(LEAD_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: rec.name, email: rec.email || "", phone: rec.phone || "",
+            level: rec.level, levelName: rec.levelName,
+            correct: rec.correct, total: rec.total, skipped: rec.skipped,
+            scores: rec.scores, origin: rec.origin || "", createdAt: rec.date
+        })
+    }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+            if (!r.ok || !j || j.ok !== true) throw new Error("HTTP " + r.status);
+            return j;
+        });
+    });
+}
+
 function saveResultToFirestore(rec) {
+    return saveResultViaWorker(rec).catch(function () { return saveResultDirect(rec); });
+}
+
+function saveResultDirect(rec) {
     var fs = fsBase();
     if (!fs.key) return Promise.reject(new Error("sin configuración"));
     var body = {

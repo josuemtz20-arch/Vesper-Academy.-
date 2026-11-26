@@ -273,7 +273,9 @@ window.VESPER_RESULTS = (function () {
         };
       });
     }
+    var name = String((doc && doc.name) || "");
     return {
+      id: name.slice(name.lastIndexOf("/") + 1),   /* mismo id en exam_results y exam_results_staff */
       studentUid: s("studentUid"), alias: s("alias") || "Estudiante",
       sid: s("sid"), group: s("group"), email: s("email") /* solo docs viejos */,
       examType: s("examType") || "lesson", examId: s("examId"), level: s("level"),
@@ -357,6 +359,7 @@ window.VESPER_RESULTS = (function () {
      falta la regla (403); [] si el profesor no tiene grupos asignados. */
   function fetchAll(opts) {
     opts = opts || {};
+    var COL = opts.collection || COLLECTION;
     var limit = Math.max(1, Math.min(1000, parseInt(opts.limit, 10) || 500));
     if (!signedIn()) return Promise.resolve(null);
 
@@ -378,7 +381,7 @@ window.VESPER_RESULTS = (function () {
     return currentUser.getIdToken().then(function (token) {
       if (isAdminUser()) {
         return runQuery(token, {
-          from: [{ collectionId: COLLECTION }],
+          from: [{ collectionId: COL }],
           orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
           limit: limit
         });
@@ -387,7 +390,7 @@ window.VESPER_RESULTS = (function () {
         if (!groups.length) return [];
         return Promise.all(groups.map(function (g) {
           return runQuery(token, {
-            from: [{ collectionId: COLLECTION }],
+            from: [{ collectionId: COL }],
             where: { fieldFilter: {
               field: { fieldPath: "group" }, op: "EQUAL",
               value: { stringValue: g }
@@ -401,6 +404,27 @@ window.VESPER_RESULTS = (function () {
           rows.sort(function (a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; });
           return rows.slice(0, limit);
         });
+      });
+    }).catch(function () { return null; });
+  }
+
+  /* Desglose del examen de nivel (2026-11-25, opción A): exam_results_staff/{id},
+     el MISMO id que su doc de exam_results; solo staff y el profesor del grupo.
+     Se lee UN documento, cuando el profesor abre el detalle de esa fila (1
+     lectura), en vez de listar la colección en cada carga: cuida el
+     presupuesto de lecturas y no depende de que dos listas de 500 coincidan.
+     Resuelve la fila (con bySkill y detail), "missing" si no existe (Worker
+     viejo, o el desglose aún no se guardó) o null si no se pudo leer (sin
+     sesión, regla sin publicar, red). */
+  function fetchStaffDoc(id) {
+    if (!signedIn() || typeof id !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(id)) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/exam_results_staff/" + encodeURIComponent(id), {
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function (r) {
+        if (r.status === 404) return "missing";
+        if (r.status !== 200) return null;
+        return r.json().then(readDoc);
       });
     }).catch(function () { return null; });
   }
@@ -437,7 +461,7 @@ window.VESPER_RESULTS = (function () {
   start();
   return {
     available: available, signedIn: signedIn, aliasOf: aliasOf, idToken: idToken,
-    record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll,
+    record: record, fetchAll: fetchAll, fetchStaffDoc: fetchStaffDoc, fetchMine: fetchMine, localAll: localAll,
     isAdminUser: isAdminUser, fetchMyGroups: fetchMyGroups, computeSid: computeSid,
     whenReady: whenReady, identity: identity
   };

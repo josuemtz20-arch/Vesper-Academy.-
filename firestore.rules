@@ -503,6 +503,22 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Desglose del examen de nivel (2026-11-25, opción A): bySkill y detail por
+    // pregunta de los exámenes que califica el Worker. El alumno NO lo lee: con
+    // el desglose por destreza de su propio intento (relleno seguro-malo + una
+    // pregunta de prueba por destreza) sacaba la clave del banco fijo. En
+    // exam_results el alumno solo ve su nota. Mismo id que su doc de
+    // exam_results. Lo escribe solo la cuenta de servicio del Worker (que no
+    // pasa por estas reglas); lo leen staff y el profesor del grupo, con la
+    // misma condición de profesor que exam_results.
+    match /exam_results_staff/{id} {
+      allow read:  if signedIn() && (
+                      isStaff()
+                      || teacherSeesGroup(resource.data.group)
+                   );
+      allow write: if false;
+    }
+
     // Boleta de calificaciones: notas capturadas por el profesor. Un doc por
     // alumno con id = sid. El alumno lee SOLO la suya; el staff todas; cada
     // profesor las de sus grupos (el grupo se resuelve contra roster/{sid}).

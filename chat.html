@@ -472,9 +472,11 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   }
 
   /* "Reportar": cualquier respuesta de Vesper se puede marcar como ofensiva o
-     incorrecta. Va a Firestore app_events (event "ai_report", create abierto en
-     las reglas) para que el admin la revise; VA.cfg.cloud está apagado, así que
-     se envía directo y no por VA.track. */
+     incorrecta. Va a Firestore app_events (event "ai_report") para que el admin
+     la revise. Desde 2026-11-25 pasa por el Worker (POST /report/ai: tope por IP
+     y global, escribe la cuenta de servicio); si el Worker falla, se intenta
+     como antes, directo (cuando las reglas cierren el create, ese respaldo solo
+     da 403). Funciona sin cuenta: el chat se usa sin iniciar sesión. */
   var REPORT_REASONS = [["ofensiva", "Ofensiva o inapropiada"], ["incorrecta", "Incorrecta"], ["otro", "Otro problema"]];
   function sendReport(text, reason) {
     var rec = { vid: "", sid: "" };
@@ -484,7 +486,7 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
          apiKey es la misma, pública, de VesperAuth.config.firebase. */
       var cfg = { projectId: "vesper-academy", apiKey: "AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio" };
       var props = JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480) });
-      fetch("https://firestore.googleapis.com/v1/projects/" + cfg.projectId +
+      var direct = function () { return fetch("https://firestore.googleapis.com/v1/projects/" + cfg.projectId +
             "/databases/teachermanuals/documents/app_events?key=" + encodeURIComponent(cfg.apiKey), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -496,7 +498,15 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
           page:      { stringValue: "chat.html" },
           createdAt: { timestampValue: new Date().toISOString() }
         } })
-      }).catch(function () {});
+      }); };
+      fetch(PROXY_URL.replace(/\/+$/, "") + "/report/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480),
+          vid: String(rec.vid || "").slice(0, 32), sid: String(rec.sid || "").slice(0, 32), page: "chat.html" })
+      }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); })
+        .catch(function () { return direct(); })
+        .catch(function () {});
     } catch (e) {}
   }
   function reportControl(body) {

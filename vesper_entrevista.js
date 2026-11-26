@@ -653,14 +653,15 @@
   });
 
   /* ── Reportar una respuesta de la IA (lo exige Google Play). Igual que el
-     chat: va a Firestore app_events, que acepta "create" sin sesión. ── */
+     chat: va a Firestore app_events a través del Worker (POST /report/ai, tope
+     por IP y global; 2026-11-25) y, si el Worker falla, directo como antes. ── */
   var REPORT_REASONS = [["ofensiva", "Ofensiva o inapropiada"], ["incorrecta", "Incorrecta"], ["otro", "Otro problema"]];
   function sendReport(text, reason) {
     var recd = { vid: "", sid: "" };
     try { if (window.VA) recd = VA.track("ai_report", { reason: reason }) || recd; } catch (e) {}
     try {
       var props = JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480) });
-      fetch("https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/app_events?key=" +
+      var direct = function () { return fetch("https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/app_events?key=" +
             encodeURIComponent("AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -672,7 +673,15 @@
           page: { stringValue: "entrevista.html" },
           createdAt: { timestampValue: new Date().toISOString() }
         } })
-      }).catch(function () {});
+      }); };
+      fetch(PROXY_URL.replace(/\/+$/, "") + "/report/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480),
+          vid: String(recd.vid || "").slice(0, 32), sid: String(recd.sid || "").slice(0, 32), page: "entrevista.html" })
+      }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); })
+        .catch(function () { return direct(); })
+        .catch(function () {});
     } catch (e) {}
   }
   function flagControl(getText, label) {

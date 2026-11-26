@@ -81,3 +81,15 @@ bucket_name = "vesper-libros"
 # RL_PRO_PER_MIN = "30"
 # RL_PRO_PER_DAY = "1000"
 # RL_GLOBAL_PER_DAY = "2000"
+# Topes de Pro (Sonnet), 2026-11-25: pasado el tope el mensaje va con Haiku.
+# RL_PRO_ACCT_PER_DAY = "100"     # por cuenta (correo) y día
+# RL_PRO_GLOBAL_PER_DAY = "300"   # todas las cuentas + código Pro, por día
+# Escrituras públicas sin cuenta (lead_server.js), 2026-11-25:
+# RL_LEAD_PER_MIN = "15"
+# RL_LEAD_PER_DAY = "40"           # leads del diagnóstico por IP
+# RL_LEAD_GLOBAL_PER_DAY = "300"
+# RL_REPORT_PER_MIN = "5"
+# RL_REPORT_PER_DAY = "30"         # reportes de la IA por IP
+# RL_REPORT_GLOBAL_PER_DAY = "300"
+# Examen de nivel con cuenta, por IP (además del tope por uid):
+# RL_EXAM_LEVEL_START_PER_DAY_IP_UID = "60"
