@@ -356,9 +356,9 @@ window.VESPER_THEME = (function () {
      #7a5e12 fijo para todos, así que en Océano, Bosque o Atardecer los
      números de capítulo, los rótulos y "Practicar →" salían en café mientras
      botones y pestañas iban en azul/verde/naranja. */
-  function inkAccent(t) {
-    var c = t.goldDp;
-    for (var i = 0; i < 40 && (contrast(c, t.cream) < 4.6 || contrast(c, t.paper) < 4.6); i++) c = darken(c, .94);
+  function inkAccent(t, min) {
+    var c = t.goldDp; min = min || 4.6;
+    for (var i = 0; i < 40 && (contrast(c, t.cream) < min || contrast(c, t.paper) < min); i++) c = darken(c, .94);
     return c;
   }
 
@@ -382,7 +382,14 @@ window.VESPER_THEME = (function () {
       /* tokens del sitio / onboarding */
       "--navy": t.dark ? t.paper : t.ink, "--navy2": t.dark ? t.line : "#2c2c4a",
       "--navy3": t.cream, "--text": t.ink, "--gold-lt": t.goldLt, "--gold-light": t.goldLt,
-      "--gold2": t.goldDp, "--gold-deep": t.goldDp, "--white": t.paper, "--border": t.line,
+      /* --gold2 pinta las micro-etiquetas en versalitas: con goldDp crudo daba
+         3.3–4.2:1 en Clásico, Marfil y Atardecer. En claros sale de inkAccent
+         (igual que --gold-ink); en Bosque y Océano goldDp ya pasaba y no cambia. */
+      "--gold2": t.dark ? t.goldDp : inkAccent(t), "--gold-deep": t.goldDp, "--white": t.paper, "--border": t.line,
+      /* Verde de "correcto" cuando es TEXTO, no relleno: --success da 3.0–3.4:1 en claros.
+         Pide 5.2 y no 4.6 porque también va sobre --ok-tint (12% de verde encima del
+         cream), que le quita ~10%; así pasa 4.5 sobre cream, paper y el tinte. */
+      "--success-ink": t.dark ? t.success : inkAccent({ goldDp: t.success, cream: t.cream, paper: t.paper }, 5.2),
       /* skin de mascota */
       "--vc-ring": sk.ring, "--vc-glow": sk.glow, "--vc-filter": sk.filter
     };
