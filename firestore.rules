@@ -574,8 +574,16 @@ service cloud.firestore {
     // como todos los track("...") del sitio; createdAt a ±1 día del reloj
     // del servidor, para no aceptar fechas basura).
     // Si algún día se enciende y aparece spam: el siguiente paso es App Check.
+    // 2026-11-25: el create abierto se cierra. La forma estaba acotada pero no
+    // la cantidad: un script podía crear documentos en bucle y agotar la cuota
+    // diaria de escrituras de toda la base. Lo único que escribe hoy son los
+    // reportes de la IA (chat.html, entrevista.html), que ahora pasan por el
+    // Worker (POST /report/ai, tope por IP y global, cuenta de servicio). Si se
+    // enciende vesper_analytics con cloud:true, necesita su propia ruta en el
+    // Worker. El bloque de abajo queda como referencia de la forma.
     match /app_events/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['event','props','vid','sid','page','createdAt'])
+      allow create: if false
+                    && request.resource.data.keys().hasOnly(['event','props','vid','sid','page','createdAt'])
                     && request.resource.data.event is string
                     && request.resource.data.event.matches('^[a-z0-9_]{1,48}$')
                     && request.resource.data.props is string && request.resource.data.props.size() <= 600
@@ -602,8 +610,15 @@ service cloud.firestore {
     // prospectos (nombre, correo, teléfono) que ningún portal docente usa.
     // Si el negocio decide que los profesores deben verlos, vuelve a añadir
     // `|| isTeacherUser()` en el read.
+    // 2026-11-25: el create sin sesión se cierra (mismo motivo que app_events:
+    // agotar la cuota de escrituras en bucle). book_placement.html guarda el
+    // lead a través del Worker (POST /lead/placement), que valida esta misma
+    // forma (lead_server.js, cleanLead), cuenta por IP y en un tope global y
+    // escribe con la cuenta de servicio. Publicar SOLO cuando el Worker y el
+    // sitio nuevos ya estén en vivo (ver _propuestas/seguridad-2026-11-25).
     match /placement_results/{id} {
-      allow create: if request.resource.data.keys().hasOnly(
+      allow create: if false
+                    && request.resource.data.keys().hasOnly(
                          ["name", "email", "phone", "level", "levelName",
                           "correct", "total", "skipped", "scores",
                           "origin", "createdAt"])

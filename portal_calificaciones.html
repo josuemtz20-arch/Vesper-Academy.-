@@ -364,7 +364,9 @@ footer a{color:var(--gold);text-decoration:none;}
       var st = r._staff;
       var msg = st === "loading" ? "Cargando el desglose…"
         : st === "missing" ? "Este intento no tiene desglose guardado."
-        : st === "error" ? "El desglose de este examen de nivel no se pudo leer. Vuelve a abrirlo; si sigue igual, avisa al administrador (regla <code>exam_results_staff</code>)."
+        /* para un profesor que no es staff, un doc que no existe también da 403
+           (la regla no puede leer su grupo): no se acusa a la regla */
+        : st === "error" ? "Desglose no disponible: puede que no se haya guardado o que no tengas acceso. Ciérralo y vuelve a abrirlo para reintentar."
         : "Abre el detalle para cargar el desglose.";
       return '<div class="detailbox"><h4>Detalle</h4><div class="qlist"><div class="qitem">' + msg + '</div></div></div>';
     }

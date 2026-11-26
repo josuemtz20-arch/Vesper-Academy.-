@@ -155,7 +155,10 @@ export class ExamAttempt extends DurableObject {
     if (!a) return { error: "no_attempt" };
     if (a.result) return { error: "finished" };
     if (a.ids.indexOf(id) < 0) return { error: "not_in_attempt" };
-    if (v !== undefined && a.v !== v) return { error: "stale" };
+    /* estricta: quien llama sin versión (código viejo de un isolate que aún no
+       se actualizó) tampoco califica un intento abierto con versión, y al
+       revés. Solo coinciden versión con versión, o "sin" con "sin". */
+    if (a.v !== v) return { error: "stale" };
     if (Object.prototype.hasOwnProperty.call(a.answered, id)) return { ok: a.answered[id], first: false };
     a.answered[id] = ok; a.order.push(id);
     await this.ctx.storage.put("a", a);

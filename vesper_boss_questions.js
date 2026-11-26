@@ -2,7 +2,7 @@
  * Bancos de los jefes sin respuestas: las claves viven solo en el Worker
  * (worker/exam_keys.json, fuera de git), que califica cada respuesta.
  * La fuente con claves es _scripts/exams/*.src.js. */
-window.VESPER_EXAM_VERSION = "1e70a4ee5db5";
+window.VESPER_EXAM_VERSION = "350780f0ae96";
 window.VESPER_BOSS_EXAMS = {
  "A1": {
   "exercises": [
