@@ -59,16 +59,15 @@
   --va-grad-dusk: linear-gradient(160deg, var(--va-dusk), var(--va-night) 60%, #0e0c1f);
   --va-glow-gold: radial-gradient(900px 420px at 80% -10%, rgba(201, 168, 76, .22), transparent 60%);
 
-  /* Tipografía. El display es Fraunces, una serif variable de contraste bajo.
-     Sustituye a Bodoni Moda (didone), cuyos trazos finos quedaban en un pelo y
-     desaparecían contra el fondo. Fraunces mantiene el registro editorial pero
-     con trazo robusto, así que ya no necesita las correcciones de eje óptico
-     que llevaba la anterior.
-     El respaldo es Georgia y no Didot a propósito: las páginas que incluyen
-     esta hoja pero NO cargan Fraunces (leccion.html, por ejemplo) caen en el
-     primer respaldo, y Georgia se parece mucho más a Fraunces —y es mucho más
-     legible— que un didone del sistema. */
-  --va-font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  /* Tipografía. Desde el 2026-11-27 el display es Inria Serif (400/700 con
+     itálica real), la misma letra de la app y los libros: Josue la eligió en la
+     arena de fuentes («formal pero que no se pierda»). Antes fue Fraunces, y
+     antes Bodoni Moda, que se quitó porque sus trazos finos desaparecían contra
+     el fondo: no volver a un didone.
+     Inria solo trae 400 y 700: un 500 se ve en 400 y un 600 en 700.
+     El respaldo es Georgia y no Didot a propósito: si una página no carga Inria
+     cae en Georgia, que se le parece y es mucho más legible que un didone. */
+  --va-font-display: "Inria Serif", Georgia, "Times New Roman", serif;
   --va-font-text: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Anillo de foco accesible. */

@@ -14,11 +14,11 @@
     var G = '<span data-hecho="grupo_max">9</span>';
     var HERO = {
       a:{h1:'Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em>',
-         lead:'Clases en vivo con profesor, en grupos de máximo '+G+' o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.'},
+         lead:'Clases en vivo con profesor, en grupos de máximo '+G+' o 1 a 1, donde el <span data-hecho="habla_pct">80</span>&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.'},
       b:{h1:'Entiendes inglés. Lo difícil es <em>contestar en voz alta.</em>',
-         lead:'Eso no se arregla con más gramática: se arregla hablando. En cada clase en vivo hablas tú el 80&nbsp;% del tiempo, con un profesor que te corrige en el momento y un grupo de máximo '+G+'.'},
+         lead:'Eso no se arregla con más gramática: se arregla hablando. En cada clase en vivo hablas tú el <span data-hecho="habla_pct">80</span>&nbsp;% del tiempo, con un profesor que te corrige en el momento y un grupo de máximo '+G+'.'},
       c:{h1:'El inglés que te piden <em>el puesto, la entrevista o el examen.</em>',
-         lead:'Clases en vivo con profesor y una ruta por niveles del MCER donde siempre sabes qué ya puedes hacer y qué te falta. Empieza por saber tu nivel real.'}
+         lead:'Clases en vivo con profesor y una ruta por niveles del MCER donde siempre sabes qué ya puedes hacer y qué te falta. Empieza por saber tu nivel.'}
     };
     var v = null, KEY = 'vesper_hero_v';
     try{
@@ -61,14 +61,14 @@
 <link rel="manifest" href="manifest_lecciones.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap">
 
 <!-- Los tokens se cargan primero: la hoja propia de la pagina debe poder sobrescribirlos. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 
 <!-- Edición móvil. Solo pinta en táctiles de <=820px; en escritorio este
      archivo no aplica una sola regla y la portada queda como siempre. -->
-<link rel="stylesheet" href="assets/css/vesper_mobile.css?v=31f383b8">
+<link rel="stylesheet" href="assets/css/vesper_mobile.css?v=54361b21">
 
 <script src="vesper_app_mode.js"></script>
 <script>
@@ -114,7 +114,7 @@
   --on-night-soft:rgba(245,242,235,.62);
 
   /* Tipografía */
-  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --display:"Inria Serif",Georgia,"Times New Roman",serif;
   --text:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   /* Tercer registro: la versalita. 66nord la usa a 16px con 0.4em de
      tracking; aquí .78rem/.26em, que es lo que aguanta un rótulo español
@@ -1343,6 +1343,51 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   #m-app .m-inicio .m-ir{margin-top:4px;}
 }
 </style>
+<style>
+/* ===== LIMPIEZA DE CLICHÉS 2 (2026-11-27) =====
+   Auditoría «19 señales de web hecha con IA», aprobada por Josue.
+   Fuera la aurora borrosa detrás del h1 (blur 52px, girando sin fin) y el
+   resplandor del medallón del teléfono. Queda el campo de estrellas. */
+.hero::before{content:none;animation:none;}
+/* Sin las cifras, el enlace a «Así son las clases» sube bajo la nota del examen. */
+.hero-more--in{margin:18px 0 0;}
+html.js-anim .hero-copy>.hero-more--in{animation-delay:420ms;}
+/* Sin el antetítulo «Cursos», su columna quedaba vacía: el título va a todo lo ancho. */
+#cursos .chap-head{grid-template-columns:1fr;}
+/* Sin las cifras, la altura mínima de pantalla dejaba un hueco vacío bajo el hero. */
+@media(min-width:981px){.hero{min-height:0;padding-bottom:0;}}
+@media (pointer: coarse) and (max-width: 820px){
+  #m-app .m-medallon{box-shadow:0 0 0 5px rgba(201,168,76,.1);}
+}
+</style>
+<style>
+/* ===== FUENTE DE TÍTULOS: INRIA SERIF (2026-11-27) =====
+   Josue eligió la opción A de la arena de fuentes («formal pero que no se
+   pierda»): los títulos pasan de Fraunces a Inria Serif, la letra de
+   leccion.html, libro.html y los manuales. Inria es estática (400 y 700, con
+   itálica real), así que cada 500/600 que pedía Fraunces se fija aquí.
+   Inter y el lema Caveat no se tocan. */
+:root{--display:"Inria Serif",Georgia,"Times New Roman",serif;}
+.hero h1{font-weight:700;letter-spacing:-.018em;line-height:1.05;}
+.hero h1 em{font-style:italic;font-weight:400;letter-spacing:-.01em;}
+.sec-title{font-weight:700;letter-spacing:-.012em;line-height:1.1;}
+.sec-title em{font-style:italic;font-weight:400;}
+.brand b{font-weight:700;letter-spacing:.015em;}
+.fbrand b{font-weight:700;letter-spacing:.015em;}
+.statrail b,.ctile h3,.ctile .cprice,.pcard h3,.proof-sub,.talk h3{font-weight:700;}
+@media (pointer: coarse) and (max-width: 820px){
+  #m-app{--m-display:"Inria Serif",Georgia,serif;}
+  #m-app .m-h1,#m-app .m-h2,#m-app .m-brand b,#m-app .m-stats b,
+  #m-app .m-method__num,#m-app .m-lvl__cefr,#m-app .m-course__n,#m-app .m-course__t,
+  #m-app .m-plan__name,#m-app .m-plan__cur,#m-app .m-plan__amt,
+  #m-app .m-cert__row b,#m-app .m-foot__brand b{font-family:var(--m-display);}
+  #m-app .m-inicio .m-h1{font-weight:700;letter-spacing:-.015em;line-height:1.1;}
+  #m-app .m-h1 em{font-style:italic;font-weight:400;letter-spacing:-.005em;}
+  #m-app .m-parada__t,#m-app .m-curso b,#m-app .m-precio,#m-app .m-hechos b,
+  #m-app .m-temabox__t,#m-app .m-fin__t{font-weight:700;}
+  #m-app .m-brand b,#m-app .m-foot__brand b{font-weight:700;letter-spacing:.015em;}
+}
+</style>
 </head>
 <body>
 
@@ -1376,7 +1421,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   "@type":"FAQPage",
   "mainEntity":[
     {"@type":"Question","name":"¿Necesito saber algo de inglés para empezar?","acceptedAnswer":{"@type":"Answer","text":"No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen diagnóstico te coloca en el peldaño correcto para que no repitas lo que ya dominas."}},
-    {"@type":"Question","name":"¿Las clases son en vivo o grabadas?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento."}},
+    {"@type":"Question","name":"¿Las clases son en vivo o grabadas?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con profesor. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento."}},
     {"@type":"Question","name":"¿En qué horarios hay clases?","acceptedAnswer":{"@type":"Answer","text":"Hay grupos de 8 de la mañana a 10 de la noche. En 1 a 1 el horario lo eliges tú."}},
     {"@type":"Question","name":"¿Cuánto dura cada clase?","acceptedAnswer":{"@type":"Answer","text":"Cada clase dura 1 hora. El plan Grupal son 5 clases por semana y el Club de Conversación, 2."}},
     {"@type":"Question","name":"¿En qué plataforma son las clases?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con profesor, por Google Meet. Solo necesitas micrófono y una conexión estable."}},
@@ -1425,6 +1470,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.6c2.7-1 5.4-.9 8 .7 2.6-1.6 5.3-1.7 8-.7v12.8c-2.7-1-5.4-.9-8 .7-2.6-1.6-5.3-1.7-8-.7zM12 6.3v12.8"/></symbol>
   <symbol id="i-video" viewBox="0 0 24 24"><rect x="2.8" y="6" width="13.2" height="12" rx="2.6"/><path d="m16 10.6 5.2-3v8.8l-5.2-3"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.6" width="10" height="18.8" rx="2.6"/><path d="M11 18.2h2"/></symbol>
+  <symbol id="i-star5" viewBox="0 0 24 24"><path d="M12 2.6l2.85 5.95 6.55.85-4.8 4.55 1.25 6.5L12 17.3l-5.85 3.15 1.25-6.5L2.6 9.4l6.55-.85z"/></symbol>
   <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2C12.8 8 16 11.2 22 12 16 12.8 12.8 16 12 22 11.2 16 8 12.8 2 12 8 11.2 11.2 8 12 2Z"/></symbol>
 </defs></svg>
 
@@ -1460,7 +1506,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   <div class="container hero-grid hero-grid--solo hero-grid--cat">
     <div class="hero-copy">
       <span class="rule"></span>
-      <span class="eyebrow">Escuela de inglés en línea · clases en vivo con profesor</span>
+      <span class="eyebrow">Escuela de inglés en línea con clases en vivo</span>
       <!-- Variante A/B: el texto por defecto es la A. El script «hero A/B»
            cambia h1 + lead según ?h=a|b|c o un sorteo guardado, y añade la
            variante al ?src= del examen, que book_placement.html ya manda
@@ -1470,13 +1516,14 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
       <!-- El lema (2026-11-13), con la letra de Vesper; desde el 2026-11-19 firma
            bajo el h1, como pidió Josue. Estilos: «EL LEMA» y «HERO MEDALLÓN PULIDO». -->
       <p class="hero-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" aria-hidden="true"><path pathLength="1" d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
-      <p class="lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
+      <p class="lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el <span data-hecho="habla_pct">80</span>&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
 <script>vesperHeroApply(document.currentScript.previousElementSibling)</script>
       <div class="hero-cta">
         <a href="book_placement.html?src=landing-hero" data-ab-src class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Haz tu examen de nivel gratis</a>
         <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn btn-ghost web-only"><svg class="i i--solid" aria-hidden="true" style="fill:currentColor;stroke:none"><use href="#i-whatsapp"/></svg> Pregunta por WhatsApp</a>
       </div>
-      <p class="cta-note"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> minutos · resultado al instante · sin crear cuenta</p>
+      <p class="cta-note"><span data-hecho="examen_preguntas">30</span> preguntas en <span data-hecho="examen_min">15</span> minutos, resultado al instante y sin crear cuenta.</p>
+      <p class="hero-more hero-more--in"><a href="como-funciona.html">Así son las clases <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
     </div>
 
     <!-- Vesper vuelve (2026-11-06, a pedido del dueño): el retrato y el
@@ -1498,27 +1545,12 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
             </span>
           </span>
           <span class="med-fillet" aria-hidden="true"></span>
-          <span class="med-spark s1" aria-hidden="true"></span>
-          <span class="med-spark s2" aria-hidden="true"></span>
         </span>
         <span class="seal-say" aria-hidden="true">Hola, soy Vesper.</span>
       </a>
-      <a class="hero-app-chip" href="#app"><b aria-hidden="true">▶</b> Mira la app <small>· gratis</small></a>
+      <a class="hero-app-chip" href="#app"><b aria-hidden="true">▶</b> Mira la app <small>gratis</small></a>
     </div>
 
-  </div>
-
-  <!-- Tres razones (2026-11-06). Antes aquí iban una ficha de 5 renglones,
-       un riel de 4 cifras y una franja de 5 sellos que repetían lo mismo:
-       cada dato se dice ahora UNA vez. La ficha completa vive en
-       como-funciona.html. -->
-  <div class="container">
-    <ul class="statrail statrail--3" aria-label="Así son las clases">
-      <li><b>En vivo</b><small>Con profesor, por <span data-hecho="plataforma">Google Meet</span></small></li>
-      <li><b>≤<span data-hecho="grupo_max">9</span></b><small>Alumnos por grupo, o 1 a 1</small></li>
-      <li><b>80&nbsp;%</b><small>Del tiempo de clase hablas tú</small></li>
-    </ul>
-    <p class="hero-more"><a href="como-funciona.html">Así son las clases <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 
@@ -1532,9 +1564,6 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
 <section id="cursos">
   <div class="container">
     <div class="chap-head reveal">
-      <div class="chap-mark">
-        <span class="eyebrow">Cursos</span>
-      </div>
       <div>
         <h2 class="sec-title">Un curso para cada meta.</h2>
         <p class="sec-lead">Elige por lo que necesitas conseguir. Tu examen de nivel te dice en qué nivel empiezas.</p>
@@ -1542,7 +1571,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
     </div>
 
     <div class="cgrid">
-      <a class="ctile reveal" href="curso-ingles-general.html">
+      <a class="ctile" href="curso-ingles-general.html">
         <div class="cvr"><img src="assets/images/landing/course_general.webp" alt="" width="720" height="402" loading="lazy" decoding="async"></div>
         <div class="cbody">
           <h3>Inglés General</h3>
@@ -1553,7 +1582,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
-      <a class="ctile reveal" href="curso-club-conversacion.html">
+      <a class="ctile" href="curso-club-conversacion.html">
         <div class="cvr"><img src="assets/images/landing/course_conversation.webp" alt="" width="720" height="402" loading="lazy" decoding="async"></div>
         <div class="cbody">
           <h3>Club de Conversación</h3>
@@ -1564,7 +1593,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
-      <a class="ctile reveal" href="curso-ingles-corporativo.html">
+      <a class="ctile" href="curso-ingles-corporativo.html">
         <div class="cvr"><img src="assets/images/landing/course_corporate.webp" alt="" width="720" height="402" loading="lazy" decoding="async"></div>
         <div class="cbody">
           <h3>Inglés Corporativo</h3>
@@ -1575,7 +1604,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
-      <a class="ctile reveal" href="curso-certificacion.html">
+      <a class="ctile" href="curso-certificacion.html">
         <div class="cvr"><img src="assets/images/landing/course_certification.webp" alt="" width="720" height="402" loading="lazy" decoding="async"></div>
         <div class="cbody">
           <h3>Certificación</h3>
@@ -1587,7 +1616,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
         </div>
       </a>
     </div>
-    <p class="cgrid-foot reveal">Mes por mes, sin inscripción ni permanencia. <a href="planes.html">Compara planes y precios <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+    <p class="cgrid-foot">Mes por mes, sin inscripción ni permanencia. <a href="planes.html">Compara planes y precios <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 
@@ -1609,14 +1638,14 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
      app.html el 2026-11-06. Aquí queda una franja: qué es y a dónde ir. -->
 <section id="app" class="app-strip">
   <div class="container app-strip__grid">
-    <div class="app-strip__art reveal" data-apptour>
+    <div class="app-strip__art" data-apptour>
       <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido de 20 segundos por la app de Vesper">
         <source src="assets/video/app_tour.webm" type="video/webm">
         <source src="assets/video/app_tour.mp4" type="video/mp4">
       </video>
       <button type="button" class="tour-btn">▶ Ver el recorrido</button>
     </div>
-    <div class="reveal">
+    <div>
       <span class="eyebrow">Extra · incluido y gratis</span>
       <h2 class="sec-title">Entre clase y clase, practicas con <em>Vesper</em>.</h2>
       <p class="sec-lead">Nuestra app de práctica: lecciones cortas, vocabulario y repaso, del A1 al C2, con Vesper, nuestro gato, como guía. Es gratis aunque todavía no seas alumno. Mira el recorrido: 20 segundos por los seis mundos.</p>
@@ -1676,11 +1705,10 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   <img src="assets/images/landing/cta_texture.webp" alt="" width="1440" height="804" loading="lazy" decoding="async">
   <div class="container">
     <div class="cta-grid">
-      <div class="reveal">
+      <div>
         <span class="rule"></span>
-        <span class="eyebrow">Empieza hoy</span>
         <h2 class="sec-title">Tu primer paso: el examen de nivel gratis.</h2>
-        <p class="sec-lead">Quince minutos, sin crear cuenta y sin compromiso. Sales sabiendo tu nivel y qué curso te toca.</p>
+        <p class="sec-lead"><span data-hecho="examen_min">15</span> minutos, sin crear cuenta y sin compromiso. Sales sabiendo tu nivel y qué curso te toca.</p>
         <ol class="steps">
           <li><b>Haces el examen de nivel</b><p><span data-hecho="examen_preguntas">30</span> preguntas en línea, unos <span data-hecho="examen_min">15</span> minutos, resultado al instante. Te pide tu correo o tu WhatsApp para mandarte el resultado.</p></li>
           <li><b>Un asesor te escribe</b><p>Con tu nivel, el curso que te toca y los horarios que hay.</p></li>
@@ -1690,7 +1718,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
         <p style="margin-top:28px"><a href="book_placement.html?src=landing-cierre" class="btn btn-gold btn-lg"><svg class="i"><use href="#i-check-doc"/></svg> Haz tu examen de nivel gratis</a></p>
       </div>
 
-      <div class="talk reveal">
+      <div class="talk">
         <h3>¿Prefieres hablar con alguien?</h3>
         <p>Escríbenos por WhatsApp y te contestamos con horarios y precios para tu caso.</p>
         <p class="talk-btns">
@@ -1793,7 +1821,11 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
       var pending = [].slice.call(document.querySelectorAll('.reveal:not(.in-view)'));
       var overdue = pending.some(function(el){
         var r = el.getBoundingClientRect();
-        return r.top < window.innerHeight && r.bottom > 0;   // visible pero sin revelar
+        /* Mismo criterio que el observer de abajo (threshold .14, margen
+           -8 %): con el hero más bajo (2026-11-27) la cabecera de Cursos cae
+           en esa franja y el criterio viejo disparaba el rescate sin motivo. */
+        var vis = Math.min(r.bottom, window.innerHeight * 0.92) - Math.max(r.top, 0);
+        return r.height > 0 && vis >= r.height * 0.14;   // visible pero sin revelar
       });
       /* El hero es lo más importante y NO depende del observer: va con una
          cascada de `animation ... both` desde opacity:0. Si a los 3 s el h1
@@ -2270,17 +2302,17 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   <section class="m-inicio" id="m-main" tabindex="-1">
     <a class="m-medallon" href="#m-appx" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
       <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="100" height="100" decoding="async">
-      <i aria-hidden="true"></i><i aria-hidden="true"></i>
+      
     </a>
-    <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · en vivo <span class="nw">con profesor</span></span>
+    <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés, en vivo <span class="nw">con profesor</span></span>
     <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
 <script>vesperHeroApply(document.currentScript.previousElementSibling)</script>
     <!-- El lema (2026-11-13): firma del titular. Estilos: sección «EL LEMA» de index.html. -->
     <p class="m-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" aria-hidden="true"><path d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
-    <p class="m-inicio__lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
+    <p class="m-inicio__lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el <span data-hecho="habla_pct">80</span>&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
 <script>vesperHeroApply(document.currentScript.previousElementSibling)</script>
     <a class="m-btn" data-cta href="book_placement.html?src=landing-m-hero" data-ab-src>Haz tu examen de nivel gratis</a>
-    <p class="m-inicio__nota"><span class="nw"><span data-hecho="examen_preguntas">30</span> preguntas</span> · <span class="nw"><span data-hecho="examen_min">15</span> min</span> · <span class="nw">resultado al instante</span> · <span class="nw">sin crear cuenta</span></p>
+    <p class="m-inicio__nota"><span class="nw"><span data-hecho="examen_preguntas">30</span> preguntas</span> en <span class="nw"><span data-hecho="examen_min">15</span> minutos,</span> <span class="nw">resultado al instante</span> y <span class="nw">sin crear cuenta.</span></p>
     <a class="m-ir m-ir--centro m-ir--claro web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>Pregunta por WhatsApp</span></a>
   </section>
 
@@ -2342,12 +2374,11 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
       <!-- Parada 2 · Las clases: los mismos tres datos que escritorio, y los temas -->
       <li class="m-parada" id="m-clases">
         <span class="m-nodo" aria-hidden="true">2</span>
-        <span class="m-eyebrow m-eyebrow--dark m-fase">Ya en clase</span>
         <h2 class="m-parada__t">Así son las clases</h2>
         <ul class="m-hechos">
           <li><b>En vivo</b><span>Con profesor, por <span data-hecho="plataforma">Google Meet</span></span></li>
           <li><b>≤ <span data-hecho="grupo_max">9</span></b><span>Alumnos por grupo, o 1 a 1</span></li>
-          <li><b>80&nbsp;%</b><span>Del tiempo de clase hablas tú</span></li>
+          <li><b><span data-hecho="habla_pct">80</span>&nbsp;%</b><span>Del tiempo de clase hablas tú</span></li>
         </ul>
         <a class="m-ir" href="como-funciona.html"><span>Mira cómo funciona</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <div class="m-temabox">
@@ -2382,7 +2413,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
 
       <!-- Llegada · Los 4 pasos, en hoja de cuaderno. Vesper se asoma sobre la hoja y firma dentro. -->
       <li class="m-parada m-fin" id="m-contacto">
-        <span class="m-nodo" aria-hidden="true"><svg class="i i--solid"><use href="#i-spark"/></svg></span>
+        <span class="m-nodo" aria-hidden="true"><svg class="i i--solid"><use href="#i-star5"/></svg></span>
         <h2 class="m-fin__t">Tu primer paso es gratis<svg viewBox="0 0 150 10" aria-hidden="true"><path d="M2 6.5C22 2.5 41 8.8 62 5.4S104 2.2 122 5.6c9 1.7 17 1.2 26-1.4" fill="none" stroke="#C9A84C" stroke-width="2.6" stroke-linecap="round"/></svg></h2>
         <div class="m-llegada">
           <img class="m-asoma" src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="108" height="108" loading="lazy" decoding="async">
@@ -2481,6 +2512,7 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
 <script type="application/json" id="vesper-hechos">
 {
   "grupo_max":        {"v": "9"},
+  "habla_pct":        {"v": "80"},
   "clases_grupal":    {"v": "5"},
   "clases_club":      {"v": "2"},
   "clases_esp":       {"v": "5"},

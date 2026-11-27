@@ -539,7 +539,7 @@
       "#vsp-enroll img{width:112px;height:112px;object-fit:contain;display:block;margin:0 auto 6px}" +
       "#vsp-enroll .ve-k{margin:0 0 6px;font-size:.72rem;font-weight:700;letter-spacing:.22em;" +
         "text-transform:uppercase;color:#f3e2ab}" +
-      "#vsp-enroll h1{margin:0 0 8px;font-family:'Fraunces','Inria Serif',Georgia,serif;font-weight:700;" +
+      "#vsp-enroll h1{margin:0 0 8px;font-family:'Inria Serif',Georgia,serif;font-weight:700;" +
         "font-size:1.6rem;line-height:1.2;color:#fff}" +
       "#vsp-enroll .ve-d{margin:0 0 20px;font-size:.98rem;color:rgba(245,242,235,.86)}" +
       "#vsp-enroll .ve-b{display:grid;gap:10px}" +
