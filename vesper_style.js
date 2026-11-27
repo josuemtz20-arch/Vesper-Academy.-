@@ -29,6 +29,7 @@ window.VESPER_STYLE = (function () {
   var CSS_HREF = "assets/css/vesper_minimal.css";
   /* láminas de la biblioteca de audio y del portal (el mapa pinta las suyas) */
   var DECO_SRC = "vesper_minimal_deco.js";
+  var THEME_SRC = "vesper_theme.js";
 
   function write(patch) {
     try {
@@ -59,6 +60,35 @@ window.VESPER_STYLE = (function () {
     s.id = "vesper-minimal-deco"; s.src = DECO_SRC; s.async = true;
     (document.head || document.documentElement).appendChild(s);
   }
+  /* Páginas que no cargan el motor de temas (lesson.html, que «Con diseño» va
+     en su crema): con <script src="vesper_style.js" data-temas-en-minimal>
+     el motor se carga sólo en minimal, así sigue el tema del alumno como el
+     resto. Al arrancar se escribe en el documento para que pinte ya con el
+     tema (sin destello crema); más tarde, por un cambio en otra pestaña, se
+     añade normal. Al volver a «Con diseño» se retiran sus variables. */
+  var SELF = document.currentScript, booting = true, ownTheme = false;
+  function wantsTheme() { return !!(SELF && SELF.hasAttribute("data-temas-en-minimal")); }
+  function ensureTheme() {
+    if (!wantsTheme()) return;
+    if (window.VESPER_THEME) { if (ownTheme) window.VESPER_THEME.apply(); return; }
+    if (document.getElementById("vesper-theme-js")) return;
+    ownTheme = true;
+    if (booting && document.readyState === "loading") {
+      document.write('<script id="vesper-theme-js" src="' + THEME_SRC + '"><\/script>');
+    } else {
+      var s = document.createElement("script");
+      s.id = "vesper-theme-js"; s.src = THEME_SRC;
+      (document.head || document.documentElement).appendChild(s);
+    }
+  }
+  function dropTheme() {
+    if (!ownTheme) return;
+    var v = document.getElementById("vesper-theme-vars");
+    if (v) v.parentNode.removeChild(v);
+    var root = document.documentElement;
+    root.classList.remove("vesper-dark");
+    root.removeAttribute("data-vesper-theme"); root.removeAttribute("data-vesper-skin");
+  }
   /* las páginas declaran su <style> DESPUÉS de este script: la hoja se mueve
      al final del <head> para ganar también por orden de cascada. */
   function moveLast() {
@@ -69,8 +99,8 @@ window.VESPER_STYLE = (function () {
   function apply(state) {
     state = state || read();
     var root = document.documentElement;
-    if (state.style === "minimal") { root.setAttribute("data-vesper-style", "minimal"); ensureLink(); ensureDeco(); }
-    else root.removeAttribute("data-vesper-style");
+    if (state.style === "minimal") { root.setAttribute("data-vesper-style", "minimal"); ensureLink(); ensureDeco(); ensureTheme(); }
+    else { root.removeAttribute("data-vesper-style"); dropTheme(); }
     api.current = state;
     try { window.dispatchEvent(new CustomEvent("vesper:style", { detail: state })); } catch (e) {}
   }
@@ -84,6 +114,7 @@ window.VESPER_STYLE = (function () {
   };
 
   apply();
+  booting = false;
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", moveLast);
   try { window.addEventListener("storage", function (e) { if (e.key === STORE) apply(); }); } catch (e) {}
   return api;
