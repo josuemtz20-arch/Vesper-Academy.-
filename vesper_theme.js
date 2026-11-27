@@ -583,10 +583,10 @@ window.VESPER_THEME = (function () {
         + mini(id === "minimal") + '<div class="vt-nm">' + name + '</div><div class="vs-d">' + desc + '</div></div>';
     }
     return '<div class="vt-h">Estilo de la app</div>'
-      + '<p class="vt-sub">Con diseño es la app de siempre. Minimalista quita escenas, sombras y adornos, pone las lecciones en lista y deja Vocabulario y Forja como fichas. Los colores siguen tu tema.</p>'
+      + '<p class="vt-sub">Con diseño es la app de siempre. Minimalista es como un libro bien impreso: láminas en lugar de escenas, las lecciones en un índice y Vesper escribiendo a mano al margen. Los colores siguen tu tema.</p>'
       + '<div class="vt-grid vs-grid" data-vt-style>'
       + card("diseno", "Con diseño", "Mapa ilustrado, escenas y burbujas")
-      + card("minimal", "Minimalista", "Lista de lecciones y fichas, sin adornos")
+      + card("minimal", "Minimalista", "Como un libro impreso: índice y láminas")
       + '</div>';
   }
 
