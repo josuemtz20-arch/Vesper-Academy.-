@@ -13,8 +13,9 @@
  *   VesperLibArt.line(col)       [inglés, español]: lo que Vesper escribe a mano
  *   VesperLibArt.colFromParams(URLSearchParams)   la colección de una lección
  *
- * Arte: niveles 1–6 = los mundos ilustrados del mapa (El Hogar … El
- * Castillo); Basics y las colecciones profesionales = escenas Higgsfield
+ * Arte: niveles 1–6 y Basics 1–3 = escenas Higgsfield con los temas de
+ * sus lecciones (2026-11-27; el mapa conserva sus mundos); Basics 4 y las
+ * colecciones profesionales = escenas Higgsfield
  * (gpt_image_2_5, 21:9). Fuente y script: _scripts/audio_hub/.
  * Diagnóstico (solo profesor) no lleva lámina: se queda con su banda.
  * ===================================================================== */

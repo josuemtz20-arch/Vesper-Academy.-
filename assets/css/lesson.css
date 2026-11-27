@@ -584,10 +584,14 @@
     font-size:1.5rem; line-height:1.05; color:#f3e2ab; }
 .banner-hand small { font-size:.78rem; color:rgba(245,242,235,.68); }
 @media (max-width:680px){
-    /* Teléfono: Vesper a la derecha, el texto sobre el velo de abajo. */
-    .banner.has-art { height:250px; }
-    .banner.has-art .banner-art { object-position:70% 30%; }
-    .banner.has-art::before { background:linear-gradient(0deg,rgba(14,12,31,.96) 0%,rgba(14,12,31,.78) 40%,rgba(14,12,31,.1) 75%,rgba(14,12,31,0) 100%); }
+    /* Teléfono: la escena arriba y el texto debajo. Encima de la lámina, un
+       título largo de 3 líneas («Daily Routine (Present Simple - I Do)»)
+       tapaba la cara de Vesper (2026-11-27). */
+    .banner.has-art { height:auto; min-height:0; padding-top:160px; }
+    .banner.has-art .banner-art { inset:0 0 auto; height:200px; object-position:62% 30%; }
+    .banner.has-art::before { background:linear-gradient(0deg,#14122a 0%,#14122a calc(100% - 200px),rgba(20,18,42,.6) calc(100% - 152px),rgba(20,18,42,0) calc(100% - 92px)); }
+    .banner.has-art .banner-inner { padding-bottom:22px; }
+    .banner.has-art h2 { max-width:none; }
     .banner-hand span { font-size:1.3rem; }
 }
 @media (prefers-reduced-motion:reduce){ .banner .banner-art { transition:none; } }
